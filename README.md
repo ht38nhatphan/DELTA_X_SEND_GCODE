@@ -1,63 +1,63 @@
 # DELTA X - ULTRA CONTROLLER
 
-**Phiên bản**: 1.0.0
-**Ngôn ngữ**: Python (PyQt5)
-**Tác giả**: Nhat Phan
+**Version**: 1.0.0
+**Language**: Python (PyQt5)
+**Author**: Nhat Phan
 
-## Giới Thiệu
-**DELTA X CONTROLLER** là phần mềm điều khiển máy CNC/Robot Delta X chuyên nghiệp, được xây dựng trên nền tảng Python và Qt5. Phần mềm cung cấp giao diện Dark Mode hiện đại, khả năng kết nối Serial mạnh mẽ và hệ thống chạy Macro thông minh.
+## Introduction
+**DELTA X CONTROLLER** is a professional CNC/Delta X Robot control software, built on the Python and Qt5 platform. The software provides a modern Dark Mode interface, powerful Serial connectivity, and a smart Macro system.
 
-## Tính Năng Nổi Bật
+## Key Features
 
-### 1. Giao Diện Người Dùng (UI)
-- **Dark Mode**: Giao diện tối màu chuyên nghiệp, giúp giảm mỏi mắt khi vận hành lâu.
-- **Responsive**: Bố cục linh hoạt, trực quan.
+### 1. User Interface (UI)
+- **Dark Mode**: Professional dark interface, reducing eye strain during long operations.
+- **Responsive**: Flexible and intuitive layout.
 
-### 2. Điều Khiển (Control)
-- **Jogging**: Điều khiển các trục X, Y, Z với các bước nhảy linh hoạt (0.01mm đến 200mm).
-- **Manual/Auto Mode**: Chuyển đổi linh hoạt giữa chế độ chạy tay và tự động.
-- **Safety**: Nút dừng khẩn cấp (EMG) và Reset Alarm (M999) được tích hợp sẵn.
+### 2. Control
+- **Jogging**: Control X, Y, Z axes with flexible step sizes (0.01mm to 200mm).
+- **Manual/Auto Mode**: Flexibly switch between manual and automatic modes.
+- **Safety**: Integrated Emergency Stop (EMG) and Reset Alarm (M999) buttons.
 
-### 3. Hệ Thống Macro Nâng Cao
-Trình chạy G-code thông minh với các tính năng vượt trội:
-- **Handshake (Hỏi-Đáp)**: Đảm bảo từng lệnh được thực thi xong (`ok` response) trước khi gửi lệnh tiếp theo.
-- **GOTO & Line Numbers**: Hỗ trợ lệnh nhảy dòng `GOTO` và đánh số dòng `N`.
-- **Visual Feedback**: Higlight dòng lệnh đang chạy theo thời gian thực (Mũi tên chỉ dẫn).
+### 3. Advanced Macro System
+Smart G-code runner with superior features:
+- **Handshake (Question-Answer)**: Ensures each command is executed (`ok` response) before sending the next one.
+- **GOTO & Line Numbers**: Supports `GOTO` jump commands and `N` line numbering.
+- **Visual Feedback**: Real-time highlighting of the running command line (Visual indicator).
 
-**Ví dụ Macro:**
+**Macro Example:**
 ```gcode
-N0 G28         ; Về Home
-N5 GOTO 15     ; Nhảy qua dòng 10
-N10 G01 X100   ; Lệnh này sẽ bị bỏ qua
-N15 M03        ; Bật Spindle
+N0 G28         ; Home
+N5 GOTO 15     ; Jump over line 10
+N10 G01 X100   ; This command will be skipped
+N15 M03        ; Turn on Spindle
 ```
 
-## Cài Đặt & Chạy
+## Installation & Running
 
-### Yêu Cầu
+### Requirements
 - Python 3.10+
-- Conda (khuyên dùng)
+- Conda (recommended)
 
-### Cài Đặt Thư Viện
+### Install Libraries
 ```bash
 pip install PyQt5 pyserial
 ```
 
-### Chạy Phần Mềm
+### Run Software
 ```bash
 python main.py
 ```
 
-## Cấu Trúc Dự Án
+## Project Structure
 ```
 DELTA_X/
-├── main.py                # File khởi chạy chính
+├── main.py                # Main entry file
 ├── src/
 │   ├── core/
-│   │   ├── serial_worker.py  # Xử lý kết nối Serial đa luồng
-│   │   └── macro_runner.py   # Bộ xử lý Macro thông minh
+│   │   ├── serial_worker.py  # Multi-threaded Serial processing
+│   │   └── macro_runner.py   # Smart Macro processor
 │   └── ui/
-│       ├── main_window.py    # Giao diện chính
-│       └── styles.py         # Giao diện Dark Theme (QSS)
+│       ├── main_window.py    # Main interface
+│       └── styles.py         # Dark Theme (QSS)
 └── README.md
 ```
