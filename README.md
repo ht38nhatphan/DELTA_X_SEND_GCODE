@@ -61,3 +61,6 @@ DELTA_X/
 │       └── styles.py         # Dark Theme (QSS)
 └── README.md
 ```
+
+python -m PyInstaller --onefile --noconsole main.py
+pyinstaller app.spec
