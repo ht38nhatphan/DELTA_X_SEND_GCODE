@@ -606,8 +606,35 @@ class CNCWindow(QMainWindow):
             self.input_terminal.clear()
 
     def send_jog(self, axis, direction):
+        # User requested: G90 move based on current UI position
+        
+        # 1. Get current position for the requested axis from UI
+        current_val = 0.0
+        try:
+            if axis == 'X':
+                text = self.lbl_pos_x.text()
+            elif axis == 'Y':
+                text = self.lbl_pos_y.text()
+            elif axis == 'Z':
+                text = self.lbl_pos_z.text()
+            else:
+                text = "0"
+            
+            # Remove any non-numeric chars except . and - and +
+            # Actually float() handles whitespace, but let's be safe if "X: 10" is used (though it isn't here)
+            current_val = float(text)
+        except ValueError:
+            current_val = 0.0
+            
+        # 2. Calculate Target
         dist = self.step_size * direction
-        cmd = f"G91 G0 {axis}{dist:.3f} F{self.feed_rate}"
+        target = current_val + dist
+        
+        # 3. Send G90 Absolute Move
+        # "VD ĐANG CLICK VÀO 1 THÌ GỬI LÀ G01 X..1."
+        # We'll assume they mean target position.
+        # Format: G90 G01 X<Target> F<Speed>
+        cmd = f"G01 {axis}{target:.3f}"
         self.send_command(cmd)
         
     def send_home(self):
@@ -619,12 +646,10 @@ class CNCWindow(QMainWindow):
     def send_emg(self):
         self.log("!!! EMERGENCY STOP !!!")
         if self.serial_worker.is_running:
-            self.serial_worker.write_data('\\x18') 
-            self.send_command("M112") 
+            self.send_command("M600 A4 B5") 
 
     def send_reset(self):
-        self.send_command("$X")
-        self.send_command("M999")
+        self.send_command("M502")
 
     def run_macro(self):
         script = self.text_macro.toPlainText()
@@ -727,7 +752,7 @@ class CNCWindow(QMainWindow):
             # send_command logs every [TX], which might spam the log every 200ms.
             # So we might want to bypass log, OR just accept the spam. 
             # Let's bypass log for polling to keep it clean.
-            self.serial_worker.write_data("?")
+            self.serial_worker.write_data("Position")
 
     def update_position_display(self, x, y, z):
         # Sync to Macro Runner for #robot0.HOME_X/Y/Z variables
